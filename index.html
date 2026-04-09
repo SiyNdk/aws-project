@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Green Digital Clock</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Courier New", monospace;
+      }
+
+      body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: radial-gradient(circle, #001a00, #000000);
+        color: #00ff88;
+      }
+
+      .clock-container {
+        text-align: center;
+        padding: 40px;
+        border-radius: 20px;
+        background: rgba(0, 255, 136, 0.05);
+        box-shadow: 0 0 40px rgba(0, 255, 136, 0.3);
+        backdrop-filter: blur(10px);
+        animation: pulseGlow 2s infinite alternate;
+      }
+
+      .time {
+        font-size: 4rem;
+        letter-spacing: 5px;
+        text-shadow: 0 0 20px #00ff88;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .date {
+        margin-top: 15px;
+        font-size: 1.2rem;
+        opacity: 0.8;
+      }
+
+      @keyframes pulseGlow {
+        from {
+          box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        to {
+          box-shadow: 0 0 60px rgba(0, 255, 136, 0.6);
+        }
+      }
+
+      .time span {
+        display: inline-block;
+        animation: pop 0.3s ease;
+      }
+
+      @keyframes pop {
+        0% {
+          transform: scale(1.4);
+          opacity: 0.5;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="clock-container">
+      <div class="time" id="time">00:00:00</div>
+      <div class="date" id="date">Loading date...</div>
+    </div>
+
+    <script>
+      function updateClock() {
+        const now = new Date();
+
+        let hours = String(now.getHours()).padStart(2, "0");
+        let minutes = String(now.getMinutes()).padStart(2, "0");
+        let seconds = String(now.getSeconds()).padStart(2, "0");
+
+        const timeString = `${hours}:${minutes}:${seconds}`;
+
+        // Animate digits
+        const timeEl = document.getElementById("time");
+        timeEl.innerHTML = timeString
+          .split("")
+          .map((char) => `<span>${char}</span>`)
+          .join("");
+
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        document.getElementById("date").textContent = now.toLocaleDateString(
+          undefined,
+          options,
+        );
+      }
+
+      setInterval(updateClock, 1000);
+      updateClock();
+    </script>
+  </body>
+</html>
